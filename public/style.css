@@ -3544,6 +3544,9 @@ blockquote.default {
 	text-align: center;
 	width: 25%;
 	right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .author-bio .author_name a{
 	color: #212121;
@@ -3559,7 +3562,6 @@ blockquote.default {
     border-radius: 50%;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
-    margin-bottom: 20px;
     padding: 2px;
     max-width: 80px;
     max-height: 80px;

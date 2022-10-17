@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<%- include('./partials/_header') %>
+
+</head>
+<body class="host_version"> 
+
+    <%- include('./partials/_preloader') %>
+
+    <%- include('./partials/_navigation') %>
+	
+	<% if(user) { %>
+
+	<% if(user.role === "admin") { %>
+	<div class="all-title-box">
+		<div class="container text-center">
+			<h1><%= user.name %><span class="m_1">I'm an admin.</span></h1>
+		</div>
+	</div>
+    <div id="overviews" class="section wb">
+        <div class="container">
+            <div class="row"> 
+                <div class="col-lg-12 blog-post-single">					
+					<div class="blog-author">
+						<div class="author-bio">
+							<h3 class="author_name"><a href="javascript:;"><%= user.name %></a></h3>
+							<h5><a href="mailto:<%= user.email %>"><%= user.email %></a></h5>
+							<p class="author_det">
+								Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt  ut aut reiciendise voluptat maiores alias consequaturs aut perferendis doloribus omnis saperet docendi nec, eos ea alii molestiae aliquand.
+							</p>
+						</div>
+						<div class="author-desc">
+							<img src="/images/author.jpg" alt="about author">
+						</div>
+					</div>
+					
+                </div><!-- end col -->
+            </div><!-- end row -->
+			<div class="row mt-5"> 
+
+				<div class="col-12 mb-4">
+					<h2>Users</h2>
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Name</th>
+								<th scope="col">Role</th>
+								<th scope="col">Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<% users.forEach(user => { %> 
+							<tr>
+								<th scope="row"><%= user._id %></th>
+								<td><%= user.name %></td>
+								<td><%= user.role %></td>
+								<td><a href="/users/<%= user._id %>?_method=DELETE" class="btn btn-danger btn-sm" onclick="return confirm('Do you want to delete <%= user.name %>?');">Delete</a></td>
+							</tr>
+							<% }) %>
+
+						</tbody>
+					</table>
+				</div>
+
+				<div class="col-12">
+					<h2>Categories</h2>
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Name</th>
+								<th scope="col">Add</th>
+								<th scope="col">Delete</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<% categories.forEach(category => { %> 
+							<tr>
+								<th scope="row"><%= category._id %></th>
+								<td><%= category.name %></td>
+								<td><a href="javascript:;" data-toggle="modal" data-target="#addCategory" class="btn btn-success btn-sm">Add</a></td>
+								<td><a href="/categories/<%= category._id %>?_method=DELETE" class="btn btn-danger btn-sm" onclick="return confirm('Do you want to delete <%= category.name %>?');">Delete</a></td>
+							</tr>
+							<% }) %>
+
+						</tbody>
+					</table>
+				</div>
+
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+
+	<!-- Add Modal -->
+	<div class="modal fade" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-4">
+					<form method="post" action="/categories">
+						<div class="form-group">
+							<input type="text" name="name" class="form-control p-3" placeholder="Category name" required>
+						</div>
+						<div class="form-group">
+							<input type="hidden" name="role" value="<%= user.role %>">
+						</div>
+						<button type="submit" class="btn btn-primary p-3">Submit</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<% } %>
+
+	<% if(user.role === "student") { %>
+	<div class="all-title-box">
+		<div class="container text-center">
+			<h1><%= user.name %><span class="m_1">I'm a student.</span></h1>
+		</div>
+	</div>
+    <div id="overviews" class="section wb">
+        <div class="container">
+            <div class="row"> 
+                <div class="col-lg-12 blog-post-single">					
+					<div class="blog-author">
+						<div class="author-bio">
+							<h3 class="author_name"><a href="javascript:;"><%= user.name %></a></h3>
+							<h5><a href="mailto:<%= user.email %>"><%= user.email %></a></h5>
+							<p class="author_det">
+								Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt  ut aut reiciendise voluptat maiores alias consequaturs aut perferendis doloribus omnis saperet docendi nec, eos ea alii molestiae aliquand.
+							</p>
+						</div>
+						<div class="author-desc">
+							<img src="/images/author.jpg" alt="about author">
+						</div>
+					</div>
+					
+                </div><!-- end col -->
+            </div><!-- end row -->
+			<div class="row mt-5"> 
+
+				<% user.courses.forEach(userCourse => { %>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="course-item mb-5">
+						<div class="image-blog">
+							<img src="/images/blog_1.jpg" alt="" class="img-fluid">
+						</div>
+						<div class="course-br">
+							<div class="course-title">
+								<h2><a href="/courses/<%= userCourse.slug %>" title=""><%= userCourse.name %></a></h2>
+							</div>
+							<div class="course-desc">
+								<p><%= userCourse.description %></p>
+								<form method="post" action="/courses/release">
+									<input type="hidden" name="courseId" value="<%= userCourse._id %>">
+									<button type="submit" class="btn btn-danger">Release Course</button>
+								</form>
+							</div>
+						</div>
+					</div>
+                </div><!-- end col -->
+				<% }) %>
+
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+	<% } %>
+
+	<% if(user.role === "teacher") { %>
+	<div class="all-title-box">
+		<div class="container text-center">
+			<h1><%= user.name %><span class="m_1">I'm a teacher.</span></h1>
+		</div>
+	</div>
+    <div id="overviews" class="section wb">
+        <div class="container">
+            <div class="row"> 
+				<div class="col-12 text-center mb-4">
+					<button type="button" class="btn btn-warning btn-lg text-white" data-toggle="modal" data-target="#addCourse">Create New Course</button>
+				</div>
+				<div class="col-lg-12 blog-post-single">					
+					<div class="blog-author">
+						<div class="author-bio">
+							<h3 class="author_name"><a href="javascript:;"><%= user.name %></a></h3>
+							<h5><a href="mailto:<%= user.email %>"><%= user.email %></a></h5>
+							<p class="author_det">
+								Lorem ipsum dolor sit amet, consectetur adip, sed do eiusmod tempor incididunt  ut aut reiciendise voluptat maiores alias consequaturs aut perferendis doloribus omnis saperet docendi nec, eos ea alii molestiae aliquand.
+							</p>
+						</div>
+						<div class="author-desc">
+							<img src="/images/author.jpg" alt="about author">
+						</div>
+					</div>
+				</div><!-- end col -->
+            </div><!-- end row -->
+			<div class="row mt-5"> 
+
+				<% courses.forEach(course => { %> 
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="course-item mb-5">
+						<div class="image-blog">
+							<img src="/images/blog_1.jpg" alt="" class="img-fluid">
+						</div>
+						<div class="course-br">
+							<div class="course-title">
+								<h2><a href="/courses/<%= course.slug %>" title=""><%= course.name %></a></h2>
+							</div>
+							<div class="course-desc">
+								<p><%= course.description %></p>
+								<div style="display: flex; justify-content: space-between;">
+									<a href="javascript:;" data-toggle="modal" data-target="#updateCourse<%= course._id %>" class="btn btn-primary">Update</a>
+									<a href="/courses/<%= course.slug %>?_method=DELETE" onclick="return confirm('Are you sure?');" class="btn btn-danger">Delete</a>
+								</div>
+							</div>
+						</div>
+					</div>
+                </div><!-- end col -->
+
+				<!-- Update Modal -->
+				<div class="modal fade" id="updateCourse<%= course._id %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body p-4">
+								<form method="post" action="/courses/<%= course.slug %>?_method=PUT">
+									<div class="form-group">
+										<label for="chooseCategory">Choose category</label>
+										<select id="chooseCategory" name="category" class="form-control" style="height: 55px;">
+											<% categories.forEach(category => { %> 
+											<option value="<%= category._id %>" <%= (category._id).toString() === (course.category).toString() && 'selected' %> ><%= category.name %></option>
+											<% }) %>
+										</select>
+									</div>
+									<div class="form-group">
+										<input type="text" name="name" class="form-control p-3" placeholder="Course name" value="<%= course.name %>" required>
+									</div>
+									<div class="form-group">
+										<input type="text" name="description" class="form-control p-3" placeholder="Course description" value="<%= course.description %>" required>
+									</div>
+									<div class="form-group">
+										<input type="hidden" name="role" value="<%= user.role %>">
+									</div>
+									<button type="submit" class="btn btn-primary p-3">Submit</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<% }) %>
+
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </div><!-- end section -->
+
+	<!-- Add Modal -->
+	<div class="modal fade" id="addCourse" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body p-4">
+					<form method="post" action="/courses">
+						<div class="form-group">
+							<label for="chooseCategory">Choose category</label>
+							<select id="chooseCategory" name="category" class="form-control" style="height: 55px;">
+								<% categories.forEach(category => { %> 
+								<option value="<%= category._id %>"><%= category.name %></option>
+								<% }) %>
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="text" name="name" class="form-control p-3" placeholder="Course name" required>
+						</div>
+						<div class="form-group">
+							<input type="text" name="description" class="form-control p-3" placeholder="Course description" required>
+						</div>
+						<div class="form-group">
+							<input type="hidden" name="role" value="<%= user.role %>">
+						</div>
+						<button type="submit" class="btn btn-primary p-3">Submit</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<% } %>
+
+	<% } %>
+
+    <%- include('./partials/_footer') %>
+
+    <%- include('./partials/_script') %>
+
+</body>
+</html>
